@@ -24,7 +24,7 @@ Data collection → EDA → Preprocessing → LSTM design → Tuning & evaluatio
 
 1. **Data collection:** downloaded OHLCV data with `yfinance`.
 2. **EDA:** price history, weekly volume, 30/90-day moving averages, return distributions (volatility, skew, kurtosis) and correlation heatmaps, with price moves linked to real events (e.g., the SBUX CEO change in Aug 2024 and the Chinese ADR delisting scare in Mar 2022).
-3. **Preprocessing:** closing prices scaled with `StandardScaler`, 90-day sliding windows, time-based train/test split at 1 January 2026. Outliers were kept because they are genuine market events.
+3. **Preprocessing:** closing prices scaled with `StandardScaler`, 90-day sliding windows, chronological 80/20 train/test split (no shuffling; test period roughly Apr 2025 – Mar 2026). Outliers were kept because they are genuine market events.
 4. **Model:** stacked LSTM → Dense(64, ReLU) → Dense(1), with dropout, Adam optimiser, MAE loss, EarlyStopping and ReduceLROnPlateau.
 5. **Hyperparameter tuning:** compared 4 configurations on validation MAE:
 
@@ -39,7 +39,7 @@ Data collection → EDA → Preprocessing → LSTM design → Tuning & evaluatio
 
 ## Results
 
-Test-set performance of the tuned model (Jan – Mar 2026):
+Test-set performance of the tuned model (last 20% of data, about Apr 2025 – Mar 2026):
 
 | Stock | MAE (USD) | RMSE (USD) | R² |
 |---|---|---|---|
@@ -50,6 +50,8 @@ Test-set performance of the tuned model (Jan – Mar 2026):
 - SBUX was the easiest to predict because it is the least volatile of the three (about 2% daily std dev).
 - Tuning improved R² for all three stocks. BROS gained the most (0.719 → 0.805).
 - RMSE > MAE for all three, so the model struggles on sudden, news-driven price jumps.
+
+![Actual vs predicted](images/actual_vs_predicted.png)
 
 **May 2026 forecast** (full results in [`outputs/Output.csv`](outputs/Output.csv)):
 
