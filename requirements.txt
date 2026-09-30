@@ -1,0 +1,11 @@
+tensorflow>=2.16
+numpy
+pandas
+scikit-learn
+yfinance
+matplotlib
+seaborn
+plotly
+visualkeras
+pydot
+jupyter
